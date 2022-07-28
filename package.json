@@ -1,0 +1,7 @@
+{
+	"devDependencies": {
+		"typescript": "^4.7.4",
+		"vite": "^3.0.3",
+		"vue": "^3.2.36"
+	}
+}

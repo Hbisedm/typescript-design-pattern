@@ -15,7 +15,7 @@ interface EventType {
   [key: string]: any;
 }
 /** 定义通用的模板 */
-let event1: EventType = {
+export let pushPullObj: EventType = {
   clientList: {},
   listen: function (key: string, func: Function) {
     if (!this.clientList[key]) {
@@ -52,8 +52,8 @@ let event1: EventType = {
 };
 
 let installEvent = function (obj: EventType) {
-  for (const key in event1) {
-    obj[key] = event1[key];
+  for (const key in pushPullObj) {
+    obj[key] = pushPullObj[key];
   }
 };
 
@@ -78,8 +78,11 @@ salesOffices.trigger("sq100", 300);
 
 console.log("sq88 更新房价了");
 salesOffices.trigger("sq88", 210);
-console.log("测试删除订阅");
 /** 删除订阅 */
+console.log("-------------");
+console.log("删除订阅");
+console.log("两个订阅剩一个");
+console.log("-------------");
 let func1 = (price: number) => {
   console.log("当前的价格 -->", price);
 };

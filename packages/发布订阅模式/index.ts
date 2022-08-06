@@ -11,6 +11,7 @@ interface EventType {
   clientList: ARR_FUNC;
   listen: (key: string, func: Function) => void;
   trigger: (key: string, basePrice: number) => void;
+  remove: (key: string, func: Function) => void;
   [key: string]: any;
 }
 /** 定义通用的模板 */
@@ -29,6 +30,23 @@ let event1: EventType = {
     }
     for (let i = 0, fn; (fn = fns[i++]); ) {
       fn.call(this, basePrice);
+    }
+  },
+  remove: function (key: string, func: Function) {
+    /** 拿到key的对应函数数组 */
+    let fns = this.clientList[key];
+    if (!fns) {
+      return false;
+    }
+    /** 没有传入函数，说明删除所有key对应的函数 */
+    if (!func) {
+      fns && fns.length === 0;
+    } else {
+      fns.forEach((item, index) => {
+        if (item === func) {
+          fns.splice(index, 1);
+        }
+      });
     }
   },
 };
@@ -60,3 +78,15 @@ salesOffices.trigger("sq100", 300);
 
 console.log("sq88 更新房价了");
 salesOffices.trigger("sq88", 210);
+console.log("测试删除订阅");
+/** 删除订阅 */
+let func1 = (price: number) => {
+  console.log("当前的价格 -->", price);
+};
+salesOffices.listen("sq89", func1);
+salesOffices.listen("sq89", (price: number) => {
+  console.log("当前的价格 ==>", price);
+});
+/** 取消订阅 */
+salesOffices.remove("sq89", func1);
+salesOffices.trigger("sq89", 333);
